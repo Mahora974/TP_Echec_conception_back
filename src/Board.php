@@ -3,6 +3,7 @@ namespace src;
 use src\Contract\Renderable;
 use src\Enum\PieceColor;
 use src\Enum\PieceType;
+use src\Exception\NoPieceException;
 use src\Piece\Piece;
 use src\Position;
 
@@ -27,6 +28,9 @@ class Board implements Renderable {
 
   public function movePiece(Position $from, Position $to): void {
     $piece = $this->pieces[$from->toKey()];
+    if (!isset($piece)) {
+      throw new NoPieceException();
+    }
     if ($piece->canMove($this, $to)) {
       $this->pieces[$to->toKey()] = $piece;
       $this->removePieceAt($from);
