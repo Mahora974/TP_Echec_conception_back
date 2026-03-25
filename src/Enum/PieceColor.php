@@ -5,10 +5,10 @@ enum PieceColor {
   case BLACK;
   
   public function opposite(): PieceColor {
-    if ($this == PieceColor::WHITE) {
-      return PieceColor::BLACK;
-    } else if ($this == PieceColor::BLACK) {
-      return PieceColor::WHITE;
+    if ($this == self::WHITE) {
+      return self::BLACK;
+    } else if ($this == self::BLACK) {
+      return self::WHITE;
     }
   }
 }
