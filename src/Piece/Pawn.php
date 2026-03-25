@@ -23,4 +23,11 @@ class Pawn extends Piece {
     }
     return false;
   }
+  
+  public function render() :string {
+    if ($this->color == PieceColor::WHITE){
+      return "P";
+    }
+    return "p";
+  }
 }

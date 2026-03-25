@@ -1,5 +1,7 @@
 <?php
 namespace src\Piece;
+
+use src\Enum\PieceColor;
 use src\Enum\PieceType;
 use src\Position;
 
@@ -16,5 +18,12 @@ class Rook extends Piece {
       return true;
     }
     return false;
+  }
+
+  public function render() :string {
+    if ($this->color == PieceColor::WHITE){
+      return "R";
+    }
+    return "r";
   }
 }

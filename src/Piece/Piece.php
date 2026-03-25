@@ -1,5 +1,7 @@
 <?php
 namespace src\Piece;
+
+use src\Board;
 use src\Contract\Renderable;
 use src\Enum\PieceColor;
 use src\Enum\PieceType;
@@ -44,13 +46,16 @@ abstract class Piece implements Renderable {
       return false;
     }
     // la case cible n'est pas occupée par un allié ;
+    if (!$this->canCapture($board, $target)){
+      return false;
+    }
     // si la pièce n'est pas un cavalier, le chemin est libre ;
-    if ($this->type !== PieceType::KNIGHT){
+    if ($this->type !== PieceType::KNIGHT && !$board->isPathClear($this->position, $target)){
       return false;
     }
     // si c'est un pion, les règles spéciales du pion sont respectées.
-    if ($this->canCapture($board, $target) && $this->type == PieceType::PAWN){
-
+    if ($this->type == PieceType::PAWN && $target->getColumn() != $this->position->getColumn() && !$board->hasPieceAt($target)){
+      return false;
     }
     return true;
   }
@@ -58,6 +63,9 @@ abstract class Piece implements Renderable {
   abstract protected function isValidMovementShape(Position $target): bool ;
   
   protected function canCapture(Board $board, Position $target): bool {
-    return false;
+    if ($board->hasPieceAt($target) && $board->getPieceAt($target)->color == $this->color){
+      return false;
+    }
+    return true;
   }
 }
