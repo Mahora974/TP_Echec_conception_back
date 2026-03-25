@@ -1,4 +1,5 @@
 <?php
+namespace src;
 
 class Position {
   private int $row;

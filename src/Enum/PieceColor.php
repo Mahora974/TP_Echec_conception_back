@@ -1,4 +1,5 @@
 <?php
+namespace src\Enum;
 
 enum PieceColor {
   case WHITE;

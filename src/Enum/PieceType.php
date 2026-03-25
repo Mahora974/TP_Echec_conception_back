@@ -1,4 +1,5 @@
 <?php
+namespace src\Enum;
 
 enum PieceType {
   case KING;
