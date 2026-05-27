@@ -1,6 +1,7 @@
 <?php
 namespace src\Piece;
 
+use Override;
 use src\Enum\PieceColor;
 use src\Enum\PieceType;
 use src\Position;

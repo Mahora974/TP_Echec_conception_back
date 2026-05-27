@@ -10,7 +10,7 @@ class King extends Piece {
 
   protected function isValidMovementShape(Position $target): bool {
     // On récupère toutes les cases probables 
-    // (c'est pas grave si on crée des cases impossibles dans ce tableau, car $target ne peut pas être une des ses position interdites)
+    // (c'est pas grave si on crée des cases impossibles dans ce tableau, car $target ne peut pas être une des ces position interdites)
     $validFinalPositions = [
       ($this->position->getRow()-1).':'.$this->position->getColumn()-1, 
       ($this->position->getRow()-1).':'.$this->position->getColumn(), 

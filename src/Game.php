@@ -39,7 +39,35 @@ class Game {
     if ($piece->getColor() !== $this->currentPlayer){
       throw new WrongTurnException();
     }
-    if ($piece->canMove($this->board, $move->getTo())) {
+    if ($piece->canCastle($this->board, $move->getTo())){
+      // Vérifier qu'aucune case par laquelle passe le roi est en échec
+      if ($this->isCheck($this->currentPlayer)) {
+        throw new InvalidMoveException("You are checked");
+      }
+      if ($move->getTo()->getColumn() == 6) {
+        $intermediateSquare = new Position($piece->getPosition()->getRow(), 5);
+        $rook = $this->board->getPieces()[$piece->getPosition()->getRow().':7'];
+      }
+      if ($move->getTo()->getColumn() == 2) {
+        $intermediateSquare = new Position($piece->getPosition()->getRow(), 3);
+        $rook = $this->board->getPieces()[$piece->getPosition()->getRow().':0'];
+      }
+      if (isset($intermediateSquare) && isset($rook)) {
+        $this->board->movePiece($move->getFrom(), $intermediateSquare);
+        if ($this->isCheck($this->currentPlayer)) {
+          $this->board->movePiece($intermediateSquare, $move->getFrom());
+          throw new InvalidMoveException("You can't castle");
+        }
+        $this->board->movePiece($intermediateSquare, $move->getTo());
+        if ($this->isCheck($this->currentPlayer)) {
+          $this->board->movePiece($move->getTo(), $intermediateSquare);
+          throw new InvalidMoveException("You can't castle");
+        }
+        // Déplacer la tour
+        $this->board->movePiece($rook->getPosition(), $intermediateSquare);
+      }
+
+    } else if ($piece->canMove($this->board, $move->getTo())) {
       $this->board->movePiece($move->getFrom(), $move->getTo());
       // vérifier qu'on ne met ou ne laisse pas le roi à découvert 
       if ($this->isCheck($this->currentPlayer)) {

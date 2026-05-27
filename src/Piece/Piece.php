@@ -14,6 +14,7 @@ abstract class Piece implements Renderable {
   protected PieceColor $color;
   protected Position $position;
   protected PieceType $type;
+  protected bool $moved = false;
 
   public function __construct(PieceColor $color, Position $position) {
     $this->color = $color;
@@ -28,6 +29,7 @@ abstract class Piece implements Renderable {
   }
 
   public function setPosition(Position $position): void {
+    $this->moved = true;
     $this->position = $position;
   }
   
@@ -70,6 +72,35 @@ abstract class Piece implements Renderable {
       if ($board->getPieceAt($target)->color == $this->color) {
         return false;
       }
+    }
+    return true;
+  }
+
+  public function canCastle(Board $board, Position $target) {
+    // check si on est en train de roquer d'abors, pour pas être bloquant
+    if ($this->type !== PieceType::KING) {
+        return false;
+    }
+    if ($target->getColumn() !== 6 && $target->getColumn() !==  2) {
+        return false;
+    }
+    if ($this->moved) {
+      return false;
+    }
+
+  // Coordonées de la tour en fct° du coté
+    if ($target->getColumn() == 6) {
+      $rook = $board->getPieces()[$this->position->getRow().':7'];
+    }
+    if ($target->getColumn() == 2) {
+      $rook = $board->getPieces()[$this->position->getRow().':0'];
+    }
+    // 
+    if (!isset($rook) || $rook->type !== PieceType::ROOK || $rook->moved ){
+      return false;
+    } 
+    if (!$board->isPathClear($rook->getPosition(), $this->position)){
+      return false;
     }
     return true;
   }
