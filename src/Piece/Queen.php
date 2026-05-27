@@ -6,7 +6,7 @@ use src\Enum\PieceType;
 use src\Position;
 
 class Queen extends Piece {
-  protected $type = PieceType::QUEEN;
+  protected PieceType  $type = PieceType::QUEEN;
 
   protected function isValidMovementShape(Position $target): bool {
     // Déplacement en colonne

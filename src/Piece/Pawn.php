@@ -5,7 +5,7 @@ use src\Enum\PieceColor;
 use src\Position;
 
 class Pawn extends Piece {
-  protected $type = PieceType::PAWN;
+  protected PieceType  $type = PieceType::PAWN;
 
   protected function isValidMovementShape(Position $target): bool {
     // On récupère toutes les cases probables 
@@ -15,8 +15,12 @@ class Pawn extends Piece {
     } else {
       $validFinalPositions = [($this->position->getRow()-1).':'.$this->position->getColumn(),($this->position->getRow()-1).':'.$this->position->getColumn()+1, ($this->position->getRow()-1).':'.$this->position->getColumn()-1];
     }
-    if (($this->color == PieceColor::WHITE && $this->position->getRow() == 1) ||($this->color == PieceColor::BLACK && $this->position->getRow() == 6)) {
+    if (($this->color == PieceColor::WHITE && $this->position->getRow() == 1)) {
       $validFinalPositions[] = ($this->position->getRow()+2).':'.$this->position->getColumn();
+    } 
+
+    if (($this->color == PieceColor::BLACK && $this->position->getRow() == 6)){
+      $validFinalPositions[] = ($this->position->getRow()-2).':'.$this->position->getColumn();
     } 
     if (in_array($target->toKey(), $validFinalPositions)){
       return true;

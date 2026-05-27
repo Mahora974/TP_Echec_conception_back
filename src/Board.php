@@ -11,12 +11,13 @@ class Board implements Renderable {
   private array $pieces = [];
 
   public function placePiece(Piece $piece): void {
-
+    $this->pieces[$piece->getPosition()->toKey()] = $piece;
   }
   public function getPieceAt(Position $position): ?Piece{
-    if (isset($pieces[$position->toKey()])){
-      return $this->pieces[$position->toKey()];
+    if (!$this->hasPieceAt($position)) {
+      throw new NoPieceException();
     }
+    return $this->pieces[$position->toKey()];
   }
   public function hasPieceAt(Position $position): bool{
     return isset($this->pieces[$position->toKey()]);
@@ -27,10 +28,10 @@ class Board implements Renderable {
   }
 
   public function movePiece(Position $from, Position $to): void {
-    $piece = $this->pieces[$from->toKey()];
-    if (!isset($piece)) {
+    if (!$this->hasPieceAt($from)) {
       throw new NoPieceException();
     }
+    $piece = $this->pieces[$from->toKey()];
     if ($piece->canMove($this, $to)) {
       $this->pieces[$to->toKey()] = $piece;
       $this->removePieceAt($from);
@@ -40,7 +41,7 @@ class Board implements Renderable {
     $row = $from->getRow();
     $column = $from->getColumn();
     if ($from->getColumn() === $to->getColumn()){
-      $diff = $from->getRow() - $to->getRow();
+      $diff = $to->getRow() - $from->getRow();
       for ($i = 0; $i < abs($diff); $i++){
         $modifier = 1;
         if ($diff< 0){
@@ -52,7 +53,7 @@ class Board implements Renderable {
         }
       }
     } else if ($from->getRow() === $to->getRow()){
-      $diff = $from->getColumn() - $to->getColumn();
+      $diff = $to->getColumn() - $from->getColumn();
       for ($i = 0; $i < abs($diff); $i++){
         $modifier = 1;
         if ($diff< 0){
@@ -64,9 +65,9 @@ class Board implements Renderable {
         }
       }
     } else {
-      $diff = $from->getColumn() - $to->getColumn();
-      $diffColumn = $from->getColumn() - $to->getColumn();
-      $diffRow=$from->getRow() - $to->getRow();
+      $diff = $to->getColumn() - $from->getColumn();
+      $diffColumn = abs($diff);
+      $diffRow= $to->getRow() - $from->getRow();
       
       for ($i = 0; $i < abs($diff); $i++){
         $modifierRow = 1;
@@ -79,7 +80,7 @@ class Board implements Renderable {
           $modifierCol *=-1;
         }
         $column += $modifierCol;
-        if (isset($pieces[$row.':'.$column])){
+        if (isset($this->pieces[$row.':'.$column])){
           return false;
         }
       }
@@ -92,7 +93,7 @@ class Board implements Renderable {
   }
   public function getKingPosition(PieceColor $color): ?Position {
     foreach ($this->pieces as $position=>$piece){
-      if ($piece->type == PieceType::KING && $piece->color ==  $color){
+      if (isset($piece) && $piece->getType() == PieceType::KING && $piece->getColor() ==  $color){
         return Position::fromKey($position);
       }
     }

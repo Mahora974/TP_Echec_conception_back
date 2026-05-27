@@ -6,7 +6,7 @@ use src\Enum\PieceType;
 use src\Position;
 
 class Bishop extends Piece {
-  protected $type = PieceType::BISHOP;
+  protected PieceType $type = PieceType::BISHOP;
 
   protected function isValidMovementShape(Position $target): bool {
     // Déplacement en diagonale

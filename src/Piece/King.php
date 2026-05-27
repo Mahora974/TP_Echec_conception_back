@@ -6,7 +6,7 @@ use src\Enum\PieceType;
 use src\Position;
 
 class King extends Piece {
-  protected $type = PieceType::KING;
+  protected PieceType  $type = PieceType::KING;
 
   protected function isValidMovementShape(Position $target): bool {
     // On récupère toutes les cases probables 

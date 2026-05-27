@@ -52,7 +52,7 @@ abstract class Piece implements Renderable {
     if (!$this->canCapture($board, $target)){
       throw new OccupiedByAllyException();
     }
-    // si la pièce n'est pas un cavalier, le chemin est libre ;
+    // si la pièce n'est pas un cavalier et que le chemin est libre ;
     if ($this->type !== PieceType::KNIGHT && !$board->isPathClear($this->position, $target)){
       throw new InvalidMoveException();
     }
@@ -66,8 +66,10 @@ abstract class Piece implements Renderable {
   abstract protected function isValidMovementShape(Position $target): bool ;
   
   protected function canCapture(Board $board, Position $target): bool {
-    if ($board->hasPieceAt($target) && $board->getPieceAt($target)->color == $this->color){
-      return false;
+    if ($board->hasPieceAt($target)){
+      if ($board->getPieceAt($target)->color == $this->color) {
+        return false;
+      }
     }
     return true;
   }

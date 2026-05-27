@@ -54,7 +54,7 @@ class Position {
   }
 
   public static function fromKey(string $key): Position {
-    if (preg_match( '^[0-7]:[0-7]\z', $key)){
+    if (preg_match( '/^[0-7]:[0-7]\z/', $key)){
       [$row, $column] = explode(':', $key);
       return new Position($row, $column);
     }

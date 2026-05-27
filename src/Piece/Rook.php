@@ -6,7 +6,7 @@ use src\Enum\PieceType;
 use src\Position;
 
 class Rook extends Piece {
-  protected $type = PieceType::ROOK;
+  protected PieceType  $type = PieceType::ROOK;
 
   protected function isValidMovementShape(Position $target): bool {
     // Déplacement en colonne
