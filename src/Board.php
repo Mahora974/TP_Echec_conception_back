@@ -33,13 +33,9 @@ class Board implements Renderable {
       throw new NoPieceException();
     }
     $piece = $this->pieces[$from->toKey()];
-    if ($piece->canMove($this, $to)) {
+      $piece->setPosition($to);
       $this->pieces[$to->toKey()] = $piece;
       $this->removePieceAt($from);
-      $piece->setPosition($to);
-    } else {
-      throw new InvalidMoveException();
-    }
   }
   public function isPathClear(Position $from, Position $to): bool{
     $row = $from->getRow();
@@ -83,7 +79,7 @@ class Board implements Renderable {
           $modifierCol *=-1;
         }
         $column += $modifierCol;
-        if (isset($this->pieces[$row.':'.$column]) && $this->pieces[$row.':'.$column]->getType() ){
+        if (isset($this->pieces[$row.':'.$column])){
           return false;
         }
       }

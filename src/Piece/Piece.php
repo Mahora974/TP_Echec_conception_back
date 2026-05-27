@@ -43,7 +43,6 @@ abstract class Piece implements Renderable {
     // la pièce ne reste pas sur place ;
     if ($this->position->equals($target)){
       return false;
-      // throw new InvalidMoveException("The piece is not moving. Please select a tile");
     }
     // la forme du déplacement est valide ;
     if (!$this->isValidMovementShape($target)){

@@ -14,21 +14,76 @@ $board = $game->getBoard();
 
 
 /*************************TEST GAMEPLAY*************************/
-
-echo $board->render();
-echo "\n\n";
-echo $game->play(new Move(new Position(1,4), new Position(3,4)));
-echo "\n";
-echo $board->render();
-echo "\n\n";
-$game->play(new Move(new Position(6,4), new Position(4,4)));
-echo "\n";
-echo $board->render();
-echo "\n\n";
-$game->play(new Move(new Position(0,3), new Position(4,7)));
-echo "\n";
-echo $board->render();
-echo "\n\n";
-$game->play(new Move(new Position(6,5), new Position(4,5)));
-echo "\n";
-echo $board->render(); 
+  echo $board->render();
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(1,4), new Position(3,4)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(6,4), new Position(4,4)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  $game->play(new Move(new Position(0,3), new Position(4,7)));
+  echo "\n";
+  echo $board->render(); 
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+} 
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(6,5), new Position(4,5)));
+  echo "\n";
+  echo $board->render(); 
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(6,3), new Position(5,3)));
+  echo "\n";
+  echo $board->render(); 
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(0,5), new Position(3,2)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(7,1), new Position(5,2)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(3,2), new Position(6,5)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(7,4), new Position(6,5)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}

@@ -6,6 +6,7 @@ use src\Enum\PieceColor;
 use src\Enum\PieceType;
 use src\Factory\PieceFactory;
 use src\Board;
+use src\Exception\InvalidMoveException;
 use src\Exception\NoPieceException;
 use src\Exception\WrongTurnException;
 use src\Piece\Piece;
@@ -38,7 +39,16 @@ class Game {
     if ($piece->getColor() !== $this->currentPlayer){
       throw new WrongTurnException();
     }
-    $this->board->movePiece($move->getFrom(), $move->getTo());
+    if ($piece->canMove($this->board, $move->getTo())) {
+      $this->board->movePiece($move->getFrom(), $move->getTo());
+      // vérifier qu'on ne met ou ne laisse pas le roi à découvert 
+      if ($this->isCheck($this->currentPlayer)) {
+        $this->board->movePiece($move->getTo(), $move->getFrom());
+        throw new InvalidMoveException("You are checked");
+      }
+    } else {
+      throw new InvalidMoveException();
+    }
     $this->switchPlayer();
     if ($this->isCheck($this->currentPlayer)){
       return "CHECK";
@@ -48,7 +58,7 @@ class Game {
   public function isCheck(PieceColor $color): bool  {
     $kingPosition = $this->board->getKingPosition($color);
     foreach ($this->board->getPieces() as $piece) {
-      if ($piece instanceof Piece && $piece->getColor() !== $this->currentPlayer){
+      if ($piece instanceof Piece && $piece->getColor() !== $color){
         if ($piece->canMove($this->board, $kingPosition)){
           return true;
         }
