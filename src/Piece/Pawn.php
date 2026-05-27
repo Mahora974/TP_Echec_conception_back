@@ -18,7 +18,6 @@ class Pawn extends Piece {
     if (($this->color == PieceColor::WHITE && $this->position->getRow() == 1)) {
       $validFinalPositions[] = ($this->position->getRow()+2).':'.$this->position->getColumn();
     } 
-
     if (($this->color == PieceColor::BLACK && $this->position->getRow() == 6)){
       $validFinalPositions[] = ($this->position->getRow()-2).':'.$this->position->getColumn();
     } 

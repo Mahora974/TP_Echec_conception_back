@@ -11,11 +11,13 @@ use src\Exception\NoPieceException;
 use src\Exception\WrongTurnException;
 use src\Piece\Piece;
 use src\Move;
+use src\Piece\Pawn;
 
 class Game {
   private Board $board;
   private PieceColor $currentPlayer;
   private PieceFactory $pieceFactory;
+  protected null|Position $canBeEatenInPassing = null;
 
   public function __construct(Board $board, PieceFactory $pieceFactory) {
     $this->board = $board;
@@ -73,6 +75,13 @@ class Game {
       if ($this->isCheck($this->currentPlayer)) {
         $this->board->movePiece($move->getTo(), $move->getFrom());
         throw new InvalidMoveException("You are checked");
+      }
+      if ($piece->getType() == PieceType::PAWN && abs($move->getFrom()->getRow() - $move->getTo()->getRow()) == 2){
+        $this->canBeEatenInPassing = $piece->getPosition();
+        $this->board->ghostPawn(new Position($move->getTo()->getRow() + ($move->getFrom()->getRow() - $move->getTo()->getRow()/2), $move->getTo()->getColumn()));
+      } else if (!is_null($this->canBeEatenInPassing)){
+        $this->canBeEatenInPassing = null;
+        $this->board->clearGhostPawn();
       }
     } else {
       throw new InvalidMoveException();

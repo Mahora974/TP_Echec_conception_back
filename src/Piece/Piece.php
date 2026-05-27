@@ -14,7 +14,7 @@ abstract class Piece implements Renderable {
   protected PieceColor $color;
   protected Position $position;
   protected PieceType $type;
-  protected bool $moved = false;
+  protected int $moved = 0;
 
   public function __construct(PieceColor $color, Position $position) {
     $this->color = $color;
@@ -29,7 +29,7 @@ abstract class Piece implements Renderable {
   }
 
   public function setPosition(Position $position): void {
-    $this->moved = true;
+    $this->moved++;
     $this->position = $position;
   }
   
@@ -60,7 +60,11 @@ abstract class Piece implements Renderable {
     }
     // si c'est un pion, les règles spéciales du pion sont respectées.
     if ($this->type == PieceType::PAWN && $target->getColumn() != $this->position->getColumn() && !$board->hasPieceAt($target)){
-      return false;
+      if ($board->getPassingPawn() == $target) {
+          $board->clearGhostPawn();
+      } else {
+        return false;
+      }
     }
     return true;
   }
@@ -84,7 +88,7 @@ abstract class Piece implements Renderable {
     if ($target->getColumn() !== 6 && $target->getColumn() !==  2) {
         return false;
     }
-    if ($this->moved) {
+    if ($this->moved > 0) {
       return false;
     }
 

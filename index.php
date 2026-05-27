@@ -105,6 +105,46 @@ try {
 } catch (Exception $error) {
   echo $error->getMessage(), "\n";
 }
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(4,7), new Position(3,6)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(1,7), new Position(3,7)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(5,5), new Position(4,3)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(1,1), new Position(2,1)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
+try {
+  echo "\n\n";
+  echo $game->play(new Move(new Position(3,6), new Position(2,7)));
+  echo "\n";
+  echo $board->render();
+} catch (Exception $error) {
+  echo $error->getMessage(), "\n";
+}
 
 /***Mat du berger***/
 // try {

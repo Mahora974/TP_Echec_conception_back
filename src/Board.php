@@ -10,6 +10,19 @@ use src\Position;
 
 class Board implements Renderable {
   private array $pieces = [];
+  protected null|Position $passingPawn = null;
+
+  public function ghostPawn(Position $position){
+    $this->passingPawn = $position;
+  }
+
+  public function getPassingPawn(){
+    return $this->passingPawn;
+  }
+
+  public function clearGhostPawn(){
+    $this->passingPawn = null;
+  }
 
   public function placePiece(Piece $piece): void {
     $this->pieces[$piece->getPosition()->toKey()] = $piece;
