@@ -30,7 +30,7 @@ class Game {
   public function getCurrentPlayer(): PieceColor {
     return $this->currentPlayer;
   }
-  public function play(Move $move): void {
+  public function play(Move $move): string | null {
     if (!$this->board->hasPieceAt($move->getFrom())){
       throw new NoPieceException();
     }
@@ -40,9 +40,10 @@ class Game {
     }
     $this->board->movePiece($move->getFrom(), $move->getTo());
     $this->switchPlayer();
-    // if ($this->isCheck($this->currentPlayer)){
-    //   echo "Check";
-    // }
+    if ($this->isCheck($this->currentPlayer)){
+      return "CHECK";
+    }
+    return null;
   }
   public function isCheck(PieceColor $color): bool  {
     $kingPosition = $this->board->getKingPosition($color);

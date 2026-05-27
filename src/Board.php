@@ -3,6 +3,7 @@ namespace src;
 use src\Contract\Renderable;
 use src\Enum\PieceColor;
 use src\Enum\PieceType;
+use src\Exception\InvalidMoveException;
 use src\Exception\NoPieceException;
 use src\Piece\Piece;
 use src\Position;
@@ -35,6 +36,9 @@ class Board implements Renderable {
     if ($piece->canMove($this, $to)) {
       $this->pieces[$to->toKey()] = $piece;
       $this->removePieceAt($from);
+      $piece->setPosition($to);
+    } else {
+      throw new InvalidMoveException();
     }
   }
   public function isPathClear(Position $from, Position $to): bool{
@@ -42,7 +46,7 @@ class Board implements Renderable {
     $column = $from->getColumn();
     if ($from->getColumn() === $to->getColumn()){
       $diff = $to->getRow() - $from->getRow();
-      for ($i = 0; $i < abs($diff); $i++){
+      for ($i = 0; $i < abs($diff) -1; $i++){
         $modifier = 1;
         if ($diff< 0){
           $modifier *=-1;
@@ -54,7 +58,7 @@ class Board implements Renderable {
       }
     } else if ($from->getRow() === $to->getRow()){
       $diff = $to->getColumn() - $from->getColumn();
-      for ($i = 0; $i < abs($diff); $i++){
+      for ($i = 0; $i < abs($diff) -1; $i++){
         $modifier = 1;
         if ($diff< 0){
           $modifier *=-1;
@@ -65,11 +69,10 @@ class Board implements Renderable {
         }
       }
     } else {
-      $diff = $to->getColumn() - $from->getColumn();
-      $diffColumn = abs($diff);
+      $diffColumn = $to->getColumn() - $from->getColumn();
       $diffRow= $to->getRow() - $from->getRow();
       
-      for ($i = 0; $i < abs($diff); $i++){
+      for ($i = 0; $i < abs($diffColumn) -1; $i++){
         $modifierRow = 1;
         if ($diffRow< 0){
           $modifierRow *=-1;
@@ -80,7 +83,7 @@ class Board implements Renderable {
           $modifierCol *=-1;
         }
         $column += $modifierCol;
-        if (isset($this->pieces[$row.':'.$column])){
+        if (isset($this->pieces[$row.':'.$column]) && $this->pieces[$row.':'.$column]->getType() ){
           return false;
         }
       }

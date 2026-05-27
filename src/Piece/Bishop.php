@@ -16,8 +16,12 @@ class Bishop extends Piece {
     $index=1;
 
     while ($temprow > 0) {
-      $diagonals[] = ($temprow-1).':'.$column-$index;
-      $diagonals[] = ($temprow-1).':'.$column+$index;
+      if ($column-$index > -1) {
+        $diagonals[] = ($temprow-1).':'.$column-$index;
+      }
+      if ($column+$index <8) {
+        $diagonals[] = ($temprow-1).':'.$column+$index;
+      }
       $temprow--;
       $index++;
     }
@@ -25,8 +29,12 @@ class Bishop extends Piece {
     $temprow = $row;
 
     while ($temprow < 7) {
-      $diagonals[] = ($temprow+1).':'.$column-$index;
-      $diagonals[] = ($temprow+1).':'.$column+$index;
+      if ($column-$index > -1) {
+        $diagonals[] = ($temprow+1).':'.$column-$index;
+      }
+      if ($column+$index < 8) {
+        $diagonals[] = ($temprow+1).':'.$column+$index;
+      }
       $temprow++;
       $index++;
     }
