@@ -44,11 +44,11 @@ abstract class Piece implements Renderable {
   public function canMove(Board $board, Position $target): bool{
     // la pièce ne reste pas sur place ;
     if ($this->position->equals($target)){
-      return false;
+      throw new InvalidMoveException();
     }
     // la forme du déplacement est valide ;
     if (!$this->isValidMovementShape($target)){
-      return false;
+      throw new InvalidMoveException();
     }
     // la case cible n'est pas occupée par un allié ;
     if (!$this->canCapture($board, $target)){
@@ -56,7 +56,7 @@ abstract class Piece implements Renderable {
     }
     // si la pièce n'est pas un cavalier et que le chemin est libre ;
     if ($this->type !== PieceType::KNIGHT && !$board->isPathClear($this->position, $target)){
-      return false;
+      throw new InvalidMoveException();
     }
     // si c'est un pion, les règles spéciales du pion sont respectées.
     if ($this->type == PieceType::PAWN && $target->getColumn() != $this->position->getColumn() && !$board->hasPieceAt($target)){
@@ -64,7 +64,7 @@ abstract class Piece implements Renderable {
           $board->clearGhostPawn();
           $board->removePieceAt(new Position($this->color== PieceColor::WHITE?$target->getRow()-1:$target->getRow()+1,$target->getColumn()));
       } else {
-        return false;
+        throw new InvalidMoveException();
       }
     }
     return true;

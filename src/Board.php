@@ -50,37 +50,32 @@ class Board implements Renderable {
       $this->pieces[$to->toKey()] = $piece;
       $this->removePieceAt($from);
   }
-  public function isPathClear(Position $from, Position $to): bool{
+
+  public function trajectory(Position $from, Position $to){
     $row = $from->getRow();
     $column = $from->getColumn();
+    $diffColumn = $to->getColumn() - $from->getColumn();
+    $diffRow= $to->getRow() - $from->getRow();
+    $pathSpaces = [];
     if ($from->getColumn() === $to->getColumn()){
-      $diff = $to->getRow() - $from->getRow();
-      for ($i = 0; $i < abs($diff) -1; $i++){
+      for ($i = 0; $i < abs($diffRow) -1; $i++){
         $modifier = 1;
-        if ($diff< 0){
+        if ($diffRow< 0){
           $modifier *=-1;
         }
         $row += $modifier;
-        if (isset($this->pieces[$row.':'.$to->getColumn()])){
-          return false;
-        }
+        $pathSpaces[] = $row.':'.$to->getColumn();
       }
     } else if ($from->getRow() === $to->getRow()){
-      $diff = $to->getColumn() - $from->getColumn();
-      for ($i = 0; $i < abs($diff) -1; $i++){
+      for ($i = 0; $i < abs($diffColumn) -1; $i++){
         $modifier = 1;
-        if ($diff< 0){
+        if ($diffColumn< 0){
           $modifier *=-1;
         }
         $column += $modifier;
-        if (isset($this->pieces[$to->getRow().':'.$column])){
-          return false;
-        }
+        $pathSpaces[] = $to->getRow().':'.$column;
       }
     } else {
-      $diffColumn = $to->getColumn() - $from->getColumn();
-      $diffRow= $to->getRow() - $from->getRow();
-      
       for ($i = 0; $i < abs($diffColumn) -1; $i++){
         $modifierRow = 1;
         if ($diffRow< 0){
@@ -92,9 +87,17 @@ class Board implements Renderable {
           $modifierCol *=-1;
         }
         $column += $modifierCol;
-        if (isset($this->pieces[$row.':'.$column])){
-          return false;
-        }
+        $pathSpaces[] = $row.':'.$column;
+      }
+    }
+    return $pathSpaces;    
+  }
+
+  public function isPathClear(Position $from, Position $to): bool{
+    $spaces = $this->trajectory($from,$to);
+    foreach ($spaces as $space) {
+      if (key_exists($space, $this->pieces) && isset($this->pieces[$space])){
+        return false;
       }
     }
     return true;
