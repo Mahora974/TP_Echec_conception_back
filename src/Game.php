@@ -19,7 +19,7 @@ class Game {
   private Board $board;
   private PieceColor $currentPlayer;
   private PieceFactory $pieceFactory;
-  private bool $ongoing = true;
+  public bool $ongoing = true;
   protected null|Position $canBeEatenInPassing = null;
 
   public function __construct(Board $board, PieceFactory $pieceFactory) {
@@ -112,7 +112,7 @@ class Game {
     }
     $this->switchPlayer();
     if ($this->isCheck($this->currentPlayer)){
-      if ($this->isChekmate($this->currentPlayer)){
+      if ($this->isCheckmate($this->currentPlayer)){
         echo "CHECKMATE\n";
         $this->switchPlayer();
         $this->end($this->currentPlayer);
@@ -177,7 +177,7 @@ class Game {
     return false;
   }
 
-  private function isChekmate(PieceColor $color): bool{
+  private function isCheckmate(PieceColor $color): bool{
     $kingPosition = $this->board->getKingPosition($color);
     $king = $this->board->getPieceAt($kingPosition);
     $kingRow = $kingPosition->getRow();
@@ -216,7 +216,7 @@ class Game {
           $this->board->movePiece($kingPosition, $possibleHideout);
           // Sans être en échec, il n'est pas échec et mat
           try{
-            if ($this->isCheck($this->currentPlayer)){
+            if (!$this->isCheck($this->currentPlayer)){
               $this->board->movePiece($possibleHideout, $kingPosition);
               $this->board->placePiece($testPiece);
               return false;
