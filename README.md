@@ -108,5 +108,5 @@ TP du cours conception et développement backend de M1 Fullstack de MDS
 - ✅ Échec et mat
 - ❌ Pat
 - ❌ Historique complet des coups
-- ❌ Tests automatisés (Entamé, mais trop peu pour considérer validé à mon avis)
+- ✅ Tests automatisés (8 fct°/ 2 classes)
 - ❌ Autre bonus : `à préciser`

@@ -1,6 +1,8 @@
 <?php
 namespace src;
 
+use InvalidArgumentException;
+
 class Position {
   private int $row;
   private int $column;
@@ -54,9 +56,10 @@ class Position {
   }
 
   public static function fromKey(string $key): Position {
-    if (preg_match( '/^[0-7]:[0-7]\z/', $key)){
-      [$row, $column] = explode(':', $key);
-      return new Position($row, $column);
+    if (!preg_match( '/^[0-7]:[0-7]\z/', $key)){
+      throw new InvalidArgumentException("Wrong key format");
     }
+    [$row, $column] = explode(':', $key);
+    return new Position($row, $column);
   }
 }
