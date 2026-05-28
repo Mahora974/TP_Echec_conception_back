@@ -77,6 +77,9 @@ abstract class Piece implements Renderable {
       if ($board->getPieceAt($target)->color == $this->color) {
         return false;
       }
+      if ($this->type == PieceType::PAWN && $target->getColumn() == $this->position->getColumn()){
+        throw new InvalidMoveException("You can't take in front of you with a pawn");
+      }
     }
     return true;
   }

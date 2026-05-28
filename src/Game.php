@@ -33,7 +33,7 @@ class Game {
   public function getCurrentPlayer(): PieceColor {
     return $this->currentPlayer;
   }
-  public function play(Move $move): string | null {
+  public function play(Move $move): void {
     if (!$this->board->hasPieceAt($move->getFrom())){
       throw new NoPieceException();
     }
@@ -76,6 +76,9 @@ class Game {
         $this->board->movePiece($move->getTo(), $move->getFrom());
         throw new InvalidMoveException("You are checked");
       }
+      if ($piece->getType() == PieceType::PAWN && ($piece->getColor() == PieceColor::WHITE && $move->getTo()->getRow() == 7) || ($piece->getColor() == PieceColor::BLACK && $move->getTo()->getRow() == 0)) {
+        $this->promote($piece);
+      }
       if ($piece->getType() == PieceType::PAWN && abs($move->getFrom()->getRow() - $move->getTo()->getRow()) == 2){
         $this->canBeEatenInPassing = $piece->getPosition();
         $this->board->ghostPawn(new Position($move->getTo()->getRow() + ($move->getFrom()->getRow() - $move->getTo()->getRow())/2, $move->getTo()->getColumn()));
@@ -88,10 +91,50 @@ class Game {
     }
     $this->switchPlayer();
     if ($this->isCheck($this->currentPlayer)){
-      return "CHECK";
+      echo "CHECK";
     }
-    return null;
   }
+
+  private function promote(Piece $piece){
+    echo "In which piece do yo want your pawn to be promotted ? \n";
+    echo "- q for queen \n";
+    echo "- r for rook \n";
+    echo "- b for bishop \n";
+    echo "- n for knight \n";
+    $handle = fopen ("php://stdin","r");
+    $line = fgets($handle);
+    while (!in_array(strtolower(trim($line)), ['q', 'queen', 'r', 'rook', 'b', 'bishop', 'n', 'knight'])) {
+      echo "Not in expected responses, retry \n";
+      $handle = fopen ("php://stdin","r");
+      $line = fgets($handle);
+    }
+    $response = strtolower(trim($line));
+    switch($response){
+      case "q":
+      case "queen": 
+        $type = PieceType::QUEEN;
+        break;
+      case "r":
+      case "rook": 
+        $type = PieceType::ROOK;
+        break;
+      case "b":
+      case "bishop": 
+        $type = PieceType::BISHOP;
+        break;
+      case "n":
+      case "knight": 
+        $type = PieceType::KNIGHT;
+        break;
+      default :
+        $type = PieceType::QUEEN;
+        break;
+    }
+      $promotion = $this->pieceFactory->create($type, $piece->getColor(), $piece->getPosition());
+      $this->board->placePiece($promotion);
+
+  }
+
   public function isCheck(PieceColor $color): bool  {
     $kingPosition = $this->board->getKingPosition($color);
     foreach ($this->board->getPieces() as $piece) {
