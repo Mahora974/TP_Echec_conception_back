@@ -62,6 +62,7 @@ abstract class Piece implements Renderable {
     if ($this->type == PieceType::PAWN && $target->getColumn() != $this->position->getColumn() && !$board->hasPieceAt($target)){
       if ($board->getPassingPawn() == $target) {
           $board->clearGhostPawn();
+          $board->removePieceAt(new Position($this->color== PieceColor::WHITE?$target->getRow()-1:$target->getRow()+1,$target->getColumn()));
       } else {
         return false;
       }

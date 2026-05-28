@@ -78,7 +78,7 @@ class Game {
       }
       if ($piece->getType() == PieceType::PAWN && abs($move->getFrom()->getRow() - $move->getTo()->getRow()) == 2){
         $this->canBeEatenInPassing = $piece->getPosition();
-        $this->board->ghostPawn(new Position($move->getTo()->getRow() + ($move->getFrom()->getRow() - $move->getTo()->getRow()/2), $move->getTo()->getColumn()));
+        $this->board->ghostPawn(new Position($move->getTo()->getRow() + ($move->getFrom()->getRow() - $move->getTo()->getRow())/2, $move->getTo()->getColumn()));
       } else if (!is_null($this->canBeEatenInPassing)){
         $this->canBeEatenInPassing = null;
         $this->board->clearGhostPawn();
